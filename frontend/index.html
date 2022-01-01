@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+  <div class="container">
+    <input type="text" class="txtb" placeholder="Add a task">
+    <div class="notcomp">
+      <h3>Not Completed</h3>
+
+
+
+    </div>
+
+    <div class="comp">
+      <h3>Completed</h3>
+    </div>
+  </div>
+
+
+  <script type="text/javascript">
+    function getAllData() {
+      $('.task').remove();
+
+      $.ajax({
+        type: "GET",
+        url: 'http://localhost:4001/api/task/all',
+        success: function (response) {
+          console.log(response);
+
+          response.forEach(element => {
+            createTaskElement(element.title, element._id, element.status);
+          });
+        },
+      });
+    };
+
+    function createTaskElement(name, id, status) {
+      var task = $("<div class='task'></div>").text(name || $(".txtb").val());
+      var del = $("<i class='fas fa-trash-alt'></i>").click(function () {
+        var p = $(this).parent();
+
+        removeTask(id, function () {
+          p.fadeOut(function () {
+            p.remove();
+          });
+        });
+      });
+
+      var check = $("<i class='fas fa-check'></i>").click(function () {
+        var that = $(this);
+
+        updateTaskStatus(id, 1, that, function () {
+          var p = that.parent();
+          p.fadeOut(function () {
+            $(".comp").append(p);
+            p.fadeIn();
+          });
+          that.remove();
+        });
+      });
+
+      /* create task */
+      
+      if (status === 1) {
+        task.append(del);
+
+        $(".comp").append(task);
+      } else {
+        task.append(del, check);
+        $(".notcomp").append(task);
+      }
+      //to clear the input
+      $(".txtb").val("");
+    }
+
+    $(".txtb").on("keyup", function (e) {
+      //13  means enter button
+      if (e.keyCode == 13 && $(".txtb").val() != "") {
+        //createTaskElement(name);
+        var name = name || $(".txtb").val();
+
+        createATask(name, createTaskElement);
+      }
+    });
+
+    function createATask(name, callback) {
+      $.ajax({
+        type: "POST",
+        url: 'http://localhost:4001/api/task/createTask',
+        dataType: "json",
+        data: {
+          title: name,
+          description: 'default',
+          status: 0
+        },
+        success: function (response) {
+          callback();
+
+          alert('Task Eklendi.');
+        },
+      });
+    };
+
+    function removeTask(taskId, callback) {
+      $.ajax({
+        type: "DELETE",
+        url: 'http://localhost:4001/api/task/delete',
+        dataType: "json",
+        data: {
+          id: taskId
+        },
+        success: function (response) {
+          callback();
+
+          alert('Task Silindi.');
+        },
+      });
+    };
+
+    function updateTaskStatus(taskId, status, { }, callback) {
+      $.ajax({
+        type: "PUT",
+        url: 'http://localhost:4001/api/task/update',
+        dataType: "json",
+        data: {
+          id: taskId,
+          status: status
+        },
+        success: function (response) {
+          callback();
+
+          alert('Task Yapıldı.');
+        },
+      });
+    };
+
+    getAllData();
+  </script>
+
+</body>
+
+</html>

@@ -8,6 +8,11 @@ router.get('/all', function (req, res, next) {
     if (err)
       res.json(err);
 
+
+      //res.render("list",{newListItems:f});
+
+      //res.render("list",{newListItems:tasks});
+
     res.json(tasks);
 
   })
