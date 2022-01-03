@@ -6,7 +6,7 @@
 }
 
 body{
-  background-image: linear-gradient(120deg,#487eb0,#fbc531);
+  /*background-image: linear-gradient(120deg,#487eb0,#fbc531);*/
   min-height: 100vh;
 }
 
@@ -33,10 +33,14 @@ h3{
 
 .task{
   width: 100%;
-  background: rgba(255,255,255,0.5);
-  padding: 18px;
+  padding: 15px;
   margin: 6px 0;
   overflow: hidden;
+  border-radius: 2rem;
+  font-size: 20px;
+  border: 2px solid purple;
+  padding-left: 40px;
+  box-shadow: 0 2px 12px 0 rgb(0 0 0 / 30%);
 }
 
 .task i{
@@ -45,7 +49,82 @@ h3{
   cursor: pointer;
 }
 
-.comp .task{
-  background: rgba(0,0,0,.5);
-  color: #fff;
+.completed-task .task{
+  background:purple;
+  color: #fff !important;
+}
+
+.not-completed-taskleted-task {
+  height: 400px;
+  overflow-y: auto;
+  width: 50% !important;
+  float: left;
+  padding: 10px;
+}
+
+.completed-task {
+  width: 50% !important;
+  float: left;
+  padding: 10px;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.auth-button , .auth-button{
+  display: block;
+  width: 115px;
+  margin: auto;
+  padding: 10px;
+  font-size: 15px;
+  background-color: darkred;
+  color: white;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 2px 12px 0 rgb(0 0 0 / 30%) !important;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+form#login {
+  width: 100% !important;
+  margin: auto;
+  text-align: center;
+  margin-top: 1;
+}
+
+input {
+  padding: 10px;
+  margin: auto;
+  margin-left: 5%;
+  margin-bottom: 20px;
+}
+
+h1 {
+  text-align: center;
+  padding:20px;
+}
+
+.login-error , .login-result {
+  text-align: center;
+}
+
+.addNewTask {
+  display: block;
+  width: 115px;
+  margin: auto;
+  padding: 10px;
+  font-size: 15px;
+  background-color: green;
+  color: white;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 2px 12px 0 rgb(0 0 0 / 30%) !important;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.taskName {
+  width: 100% !important;
 }

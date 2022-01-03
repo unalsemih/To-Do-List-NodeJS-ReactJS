@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <h1>Registration</h1>
+    <form id="reg-form">
+        <input type="email" autocomplete="off" id="email" placeholder="Email" />
+        <input type="password" autocomplete="off" id="password" placeholder="Password" />
+        <input type="submit" class="auth-button" value="Submit Form" />
+    </form>
+
+    <script>
+        var form = document.getElementById('reg-form');
+        form.addEventListener('submit', registerUser);
+
+        async function registerUser(event) {
+            event.preventDefault();
+
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+
+            var result = await fetch('http://localhost:4001/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            }).then((res) => res.json())
+
+            if (result.status === 'ok') {
+                alert('Kaydınız Oluşturuldu. Giriş Yapmalısınız.');
+
+                setTimeout(function(){
+                    window.location.href = 'login.html';
+                }, 1000);
+            } else {
+                alert(result.error || 'Lütfen Bilgileri Kontrol Ediniz.')
+            }
+        }
+    </script>
+</body>
+
+</html>

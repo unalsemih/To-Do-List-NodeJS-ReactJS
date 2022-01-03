@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Login</title>
+        <link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<h1>Login</h1>
+		<form id="login">
+			<input type="text" autocomplete="off" id="email" placeholder="email" />
+			<input type="password" autocomplete="off" id="password" placeholder="Password" />
+			<input type="submit"  class="auth-button" value="Submit Form" />
+		</form>
+        <div class="login-result" style="color:green; font-weight: bold; font-size: 15px;"></div>
+        <div class="login-error" style="color:red; font-weight: bold; font-size: 15px;"></div>
+
+        <br>
+        <a href="register.html">
+            <button class="auth-button">Register</button>
+        </a>
+
+		<script>
+			const form = document.getElementById('login')
+			form.addEventListener('submit', login)
+
+			async function login(event) {
+				event.preventDefault()
+				const email = document.getElementById('email').value
+				const password = document.getElementById('password').value
+
+				const result = await fetch('http://localhost:4001/auth/login', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						email,
+						password
+					})
+				}).then((res) => res.json())
+
+				if (result.status === 'ok') {
+					// everythign went fine
+					console.log('Got the token: ', result.data)
+					localStorage.setItem('token', result.data)
+
+                    document.querySelector('.login-error').innerText = '';
+                    document.querySelector('.login-result').innerText ='Giriş Yapıldı. Yönlendiriliyorsunuz..';
+                    
+                    
+
+                    setTimeout(function(){
+                        window.location = 'index.html';
+                    }, 1000);
+                
+                } else {
+                    document.querySelector('.login-result').innerText = '';
+                    document.querySelector('.login-error').innerText = result.error;
+				}
+			}
+		</script>
+	</body>
+</html>

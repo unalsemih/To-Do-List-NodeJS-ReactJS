@@ -12,6 +12,10 @@ const TaskSchema = new Schema({
     },
     status: {
         type: Number
+    },
+    email: {
+        type: String,
+        required: true
     }
 });
 

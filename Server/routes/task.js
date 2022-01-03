@@ -1,17 +1,22 @@
 const express = require('express');
+const jwt = require('jsonwebtoken')
 const router = express.Router();
 const Task = require('../models/Task');
+const JWT_SECRET = 'tes+^%+^&+%/ta^+sda%^sd&&%68adasdad_131ı4u3128++!as28+%dsa%+dasd';
 
 /* GET -- List all data */
 router.get('/all', function (req, res, next) {
-  Task.find({}, (err, tasks) => {
+  if (!jwt.verify(req.headers.token, JWT_SECRET)) {
+    res.json({ error: 'Authentication Failed' });
+  }
+
+  const userPayload = jwt.decode(req.headers.token);
+
+  console.log(userPayload);
+
+  Task.find({ email: userPayload.email }, (err, tasks) => {
     if (err)
       res.json(err);
-
-
-      //res.render("list",{newListItems:f});
-
-      //res.render("list",{newListItems:tasks});
 
     res.json(tasks);
 
@@ -20,11 +25,18 @@ router.get('/all', function (req, res, next) {
 
 /* POST -- Create Task */
 router.post('/createTask', function (req, res, next) {
+  if (!jwt.verify(req.headers.token, JWT_SECRET)) {
+    res.json({ error: 'Authentication Failed' });
+  }
+
+  const userPayload = jwt.decode(req.headers.token);
+
   const { title, description } = req.body;
 
   const task = new Task({
     title: title,
-    description: description
+    description: description,
+    email: userPayload.email
   });
 
   task.save((err, data) => {
